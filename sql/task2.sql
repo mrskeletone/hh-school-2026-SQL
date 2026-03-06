@@ -12,13 +12,13 @@ values (0.9, 'Отлично'),
 with  spec_insert AS (
     insert into specialization (parent_id, name)
         select NULL, 'Специализация ' || i
-        from generate_series(11, 20) AS i
+        from generate_series(1, 10) AS i
         returning specialization_id, name)
 insert
 into specialization (parent_id, name)
 select parent.specialization_id, parent.name || ' - подкатегория ' || j
-from (select specialization_id, name from spec_insert) AS parent
-         cross join  generate_series(11, 20) AS j;
+from spec_insert AS parent
+         cross join  generate_series(1, 10) AS j;
 
 do
 $$

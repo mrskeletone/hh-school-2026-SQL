@@ -29,20 +29,20 @@ $$
         select COUNT(*) into area_count from area;
         select COUNT(*) into spec_count from specialization;
 
-        insert into vacancy (address, specialization_id, area_id, department, employer, name,
+        insert into vacancy (address, specialization_id, area_id, department, employer_id, name,
                              premium, has_test, published_at, compensation_from, compensation_to, type)
         select 'ул. ' ||  floor(random() * 9)+1 || floor(random() * 9) || ', д. ' ||
                floor(random() * 100)::text,
                floor(random() * spec_count) + 1,
                floor(random() * area_count) + 1,
                (array ['Отдел разработки', 'Отдел продаж', 'Бухгалтерия', 'HR', 'Маркетинг'])[floor(random() * 5) + 1],
-               (array [ 'Яндекс', 'Сбербанк', 'Магнит', 'Лента', 'Дикси'])[floor(random() * 5) + 1],
+               floor(random()*100000)+1,
                (array ['Программист', 'Бухгалтер', 'Водитель', 'Инженер', 'Аналитик', 'Дизайнер', 'Маркетолог', 'HR-менеджер'])[floor(random() * 8) + 1],
                random() < 0.1,
                random() < 0.2,
                now() - (random() * interval '3 years'),
-               (random() * 100000 + 20000)::int,
-               ((random() * 100000 + 20000) + random() * 80000)::int,
+               (random()*10000+20000)::int,
+               ((random()*10000+30000) + random() * 80000)::int,
                (array ['полная', 'частичная', 'гибридная'])[floor(random() * 3) + 1]
         from generate_series(1, 500000);
     end
@@ -83,7 +83,7 @@ insert
 into response(has_update, messaging_status, viewed_by_opponent,
               test_result_id, resume_id, vacancy_id, created_at)
 select random() < 0.3,
-       (array ['sent','delevered','read',NULL])[floor(random() * 4) + 1],
+       (array ['sent','delevered','read'])[floor(random() * 3) + 1],
        random() < 0.5,
        case when random() < 0.4 then floor(random() * 5) + 1 end,
        floor(random() * 1000000) + 1,
@@ -104,7 +104,7 @@ insert
 into response(has_update, messaging_status, viewed_by_opponent,
               test_result_id, resume_id, vacancy_id, created_at)
 select random() < 0.2,
-       (array ['sent','delevered','read',NULL])[floor(random() * 4) + 1],
+       (array ['sent','delevered','read'])[floor(random() * 3) + 1],
        random() < 0.6,
        case when random() < 0.4 then floor(random() * 5) + 1 end,
        floor(random() * 1000000) + 1,

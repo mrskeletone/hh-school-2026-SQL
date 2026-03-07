@@ -12,7 +12,7 @@ create table test_result
 create table specialization
 (
     specialization_id integer generated always as identity primary key,
-    parent_id         integer,
+    parent_id         integer references specialization(specialization_id),
     name              text not null
 );
 create table vacancy
@@ -22,13 +22,13 @@ create table vacancy
     specialization_id integer       not null references specialization (specialization_id),
     area_id           integer       not null references area (area_id),
     department        text          not null,
-    employer          text          not null,
+    employer_id       integer          not null,
     name              text          not null,
     premium           boolean       not null,
     has_test          boolean       not null,
     published_at      timestamp     not null,
-    compensation_from numeric(12, 2) not null,
-    compensation_to   numeric(12, 2) not null,
+    compensation_from numeric(12, 0) not null,
+    compensation_to   numeric(12, 0) not null,
     type              text          not null
 );
 create table resume
@@ -42,18 +42,18 @@ create table resume
     first_name        text          not null,
     last_name         text          not null,
     middle_name       text,
-    salary            numeric(12, 2) not null,
+    salary            numeric(12, 0) not null,
     specialization_id integer       not null references specialization (specialization_id),
     created_at        timestamp
 );
 create table response
 (
     response_id        integer generated always as identity primary key,
-    has_update         boolean,
-    messaging_status   text,
-    viewed_by_opponent boolean,
+    has_update         boolean not null ,
+    messaging_status   text not null ,
+    viewed_by_opponent boolean not null ,
     test_result_id     integer references test_result (test_result_id),
     resume_id          integer not null references resume (resume_id),
-    vacancy_id         integer references vacancy (vacancy_id),
-    created_at         timestamp
+    vacancy_id         integer not null references vacancy (vacancy_id),
+    created_at         timestamp not null
 );
